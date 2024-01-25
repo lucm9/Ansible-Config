@@ -3,9 +3,9 @@ pipeline {
 
   stages {
     stage("Initial cleanup") {
-          steps {
-            dir("${WORKSPACE}") {
-              deleteDir()
+      steps {
+        dir("${WORKSPACE}") {
+          deleteDir()
             }
           }
         }
@@ -37,14 +37,14 @@ pipeline {
     stage('Deploy') {
       steps {
         script {
-          sh sh 'echo "Deploying to dev"'
+            sh 'echo "Deploying to dev"'
         }
-      }
     }
+}
     
     stage('Clean Up') {
         steps {
-        cleanWs()
+          cleanWs()
       }
     }
     }
