@@ -6,17 +6,17 @@
 #     name: apache2
 #     state: stopped
 
-- name: Install nginx
-  become: true
-  apt:
-    name: nginx
-    state: present
+# - name: Install nginx
+#   become: true
+#   apt:
+#     name: nginx
+#     state: present
 
-- name: Ensure nginx is started
-  become: true
-  service:
-    name: nginx
-    state: started
+# - name: Ensure nginx is started
+#   become: true
+#   service:
+#     name: nginx
+#     state: started
 
 # - name: Copy over nginx config
 #   become: true
@@ -67,6 +67,18 @@
 #   become: true
 #   command: "sudo certbot --nginx -d lucdevops.online -d www.lucdevops.online"
 #   when: not cert_check.stat.exists
+
+- name: install nginx on the webserver
+  ansible.builtin.yum:
+      name: nginx
+      state: present
+
+
+- name: ensure nginx is started and enabled
+  ansible.builtin.service:
+     name: nginx
+     state: started 
+     enabled: yes
 
 - name: install PHP
   ansible.builtin.yum:
