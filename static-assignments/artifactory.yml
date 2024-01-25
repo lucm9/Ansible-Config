@@ -1,0 +1,5 @@
+---
+- hosts: artifact_repository
+  roles:
+    - role: artifactory
+      become: yes
