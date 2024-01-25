@@ -31,8 +31,8 @@ source ~/.bash_profile
 
 ##### Install  php
 =====================================
-- yum module reset php -y
-- yum module enable php:remi-7.4 -y
+- sudo yum module reset php -y
+- sudo yum module install php:remi-8.1 -y
 - yum install -y php  php-common php-mbstring php-opcache php-intl php-xml php-gd php-curl php-mysqlnd php-fpm php-json
 - systemctl start php-fpm
 - systemctl enable php-fpm
