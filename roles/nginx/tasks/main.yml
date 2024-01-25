@@ -18,26 +18,26 @@
     name: nginx
     state: started
 
-- name: Copy over nginx config
-  become: true
-  blockinfile:
-    path: /etc/nginx/nginx.conf
-    block: "{{ lookup('file', 'nginx.conf') }}"
-    insertafter: 'http {'
+# - name: Copy over nginx config
+#   become: true
+#   blockinfile:
+#     path: /etc/nginx/nginx.conf
+#     block: "{{ lookup('file', 'nginx.conf') }}"
+#     insertafter: 'http {'
 
-- name: Comment out sites-enabled line and validate nginx
-  become: true
-  replace:
-    path: /etc/nginx/nginx.conf
-    regexp: '(.*etc/nginx/sites-enabled.*)'
-    replace: '# \1'
-    validate: '/usr/sbin/nginx -c %s -t'
+# - name: Comment out sites-enabled line and validate nginx
+#   become: true
+#   replace:
+#     path: /etc/nginx/nginx.conf
+#     regexp: '(.*etc/nginx/sites-enabled.*)'
+#     replace: '# \1'
+#     validate: '/usr/sbin/nginx -c %s -t'
 
-- name: Restart nginx
-  become: true
-  service:
-    name: nginx
-    state: restarted
+# - name: Restart nginx
+#   become: true
+#   service:
+#     name: nginx
+#     state: restarted
 
 # Add cert to the loadbalancer
 
@@ -67,3 +67,12 @@
 #   become: true
 #   command: "sudo certbot --nginx -d lucdevops.online -d www.lucdevops.online"
 #   when: not cert_check.stat.exists
+
+- name: install PHP
+  ansible.builtin.yum:
+    name:
+      - php 
+      - php-mysqlnd
+      - php-gd 
+      - php-curl
+    state: present
