@@ -1,0 +1,44 @@
+---
+- name: update web, nfs 
+  hosts: webservers:nfs
+  remote_user: ec2-user
+  become: true
+  become_user: root
+  tasks:
+    - name: ensure wireshark is at the latest version
+      yum:
+        name: wireshark
+        state: latest
+
+- name: update LB server and db server
+  hosts: lb:db
+  remote_user: ubuntu
+  become: true
+  become_user: root
+  tasks:
+    - name: Update apt repo
+      apt: 
+        update_cache: yes
+
+    - name: ensure wireshark is at the latest version
+      apt:
+        name: wireshark
+        state: latest
+
+- name: create directory and file and set timezone
+  hosts: nfs:db:webservers:lb
+  become: true
+  tasks:
+    - name: create a directory
+      file:
+        path: /home/sample
+        state: directory
+
+    - name: create a file
+      file:
+        path: /home/sample/test.txt
+        state: touch
+    
+    - name : set timezone 
+      timezone:
+        name: "America/Chicago"

@@ -1,0 +1,69 @@
+---
+# tasks file for nginx
+# - name: Stop Apache2
+#   become: true
+#   service:
+#     name: apache2
+#     state: stopped
+
+- name: Install nginx
+  become: true
+  apt:
+    name: nginx
+    state: present
+
+- name: Ensure nginx is started
+  become: true
+  service:
+    name: nginx
+    state: started
+
+- name: Copy over nginx config
+  become: true
+  blockinfile:
+    path: /etc/nginx/nginx.conf
+    block: "{{ lookup('file', 'nginx.conf') }}"
+    insertafter: 'http {'
+
+- name: Comment out sites-enabled line and validate nginx
+  become: true
+  replace:
+    path: /etc/nginx/nginx.conf
+    regexp: '(.*etc/nginx/sites-enabled.*)'
+    replace: '# \1'
+    validate: '/usr/sbin/nginx -c %s -t'
+
+- name: Restart nginx
+  become: true
+  service:
+    name: nginx
+    state: restarted
+
+# Add cert to the loadbalancer
+
+# - name: Install Certbot Snap
+#   become: true
+#   command: sudo snap install --classic certbot
+
+# - name: Install Certbot via APT
+#   become: true
+#   apt:
+#     name: "{{ item }}"
+#     state: present
+#   loop:
+#     - certbot
+#     - python3-certbot-nginx
+
+# - name: Reload Nginx
+#   become: true
+#   command: sudo nginx -s reload
+
+# - name: Check if SSL certificate is already present
+#   stat:
+#     path: "/etc/letsencrypt/live/lucdevops.online/fullchain.pem"
+#   register: cert_check
+
+# - name: Run Certbot for Nginx if certificate is not present
+#   become: true
+#   command: "sudo certbot --nginx -d lucdevops.online -d www.lucdevops.online"
+#   when: not cert_check.stat.exists
