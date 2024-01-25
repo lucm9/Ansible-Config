@@ -13,8 +13,8 @@
 #     - always
 
 - name: import database file
-  hosts: db
   import_playbook: ../static-assignments/database.yml
+
 
 # - name: import webservers file
 #   import_playbook: ../static-assignments/uat-webservers.yml
@@ -24,5 +24,4 @@
 #   when: load_balancer_is_required
 
 - name: nginx assignment
-  hosts: nginx
   import_playbook: ../static-assignments/nginx.yml
