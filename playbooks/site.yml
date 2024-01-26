@@ -28,3 +28,6 @@
 
 # - name: nginx assignment
 #   import_playbook: ../static-assignments/nginx.yml
+
+- name: Deploy the todo application
+  import_playbook: ../static-assignments/deployment.yml
