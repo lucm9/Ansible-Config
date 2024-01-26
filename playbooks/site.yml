@@ -12,8 +12,8 @@
 #   tags:
 #     - always
 
-- name: import database file
-  import_playbook: ../static-assignments/database.yml
+# - name: import database file
+#   import_playbook: ../static-assignments/database.yml
 
 # - name: import artifactory file
 #   import_playbook: ../static-assignments/artifactory.yml
