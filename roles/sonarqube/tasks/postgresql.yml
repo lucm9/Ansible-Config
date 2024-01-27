@@ -18,10 +18,18 @@
     state: present
 
 - name: Start and enable PostgreSQL
-  ansible.builtin.systemd:
+  ansible.builtin.service:
     name: postgresql
     state: started
     enabled: yes
+
+  # If PostgreSQL was restarted, wait for it to be ready before proceeding
+  async: 300
+  poll: 0
+  become: yes
+  become_user: postgres
+  ignore_errors: yes
+  register: postgres_restart
 
 - name: Create password for user postgres
   ansible.builtin.user:

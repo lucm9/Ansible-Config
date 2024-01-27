@@ -1,31 +1,16 @@
----
-# tasks file for sonarqube
-
-- name: Update system package cache
-  ansible.builtin.apt:
-    update_cache: yes
-
-- name: Set max_map
-  ansible.builtin.command:
-    cmd: sysctl -w vm.max_map_count=262144
-
-- name: Set file max
-  ansible.builtin.command:
-    cmd: sysctl -w fs.file-max=65536
-
 - name: Add max limits
   ansible.builtin.lineinfile:
     path: /etc/security/limits.conf
-    line:
-      - "sonarqube   -   nofile   65536"
-      - "sonarqube   -   nproc    4096"
+    line: 
+      - "sonarqube - nofile 65536"
+      - "sonarqube - nproc 4096"
     create: yes
 
-- name: Add PPA repository 
+- name: Add Linux Uprising Java PPA repository 
   ansible.builtin.apt_repository:
-    repo: ppa:linuxuprising/java
+    repo: "ppa:linuxuprising/java"
 
-- name: Install required packages
+- name: Install Python 3 and dependencies
   ansible.builtin.apt:
     name:
       - python3
@@ -34,28 +19,27 @@
       - libpq-dev
     state: present
 
-- name: Install setuptools
-  ansible.builtin.pip:
+- name: Install Python setuptools
+  pip:
     name: setuptools
-    state: latest
+    extra_args: --upgrade
 
 - name: Upgrade pip
-  ansible.builtin.pip:
+  pip:
     name: pip
-    state: latest
+    extra_args: --upgrade
 
 - name: Install pip dependencies
-  ansible.builtin.pip:
+  pip:
     name: psycopg2
     executable: pip3
 
-- name: Install Java 17
+- name: Install OpenJDK 17
   ansible.builtin.apt:
     name:
       - openjdk-17-jdk
       - openjdk-17-jre
     state: present
-    allow_unauthenticated: yes
 
 - import_tasks: postgresql.yml
 
