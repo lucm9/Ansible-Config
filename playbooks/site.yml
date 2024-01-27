@@ -32,5 +32,5 @@
 # - name: Deploy the todo application
 #   import_playbook: ../static-assignments/deployment.yml
 
-  # - name: Import Sonarqube
-  #   import_playbook:  ../static-assignments/sonar.yml
+  - name: Import Sonarqube
+    import_playbook:  ../static-assignments/sonar.yml
