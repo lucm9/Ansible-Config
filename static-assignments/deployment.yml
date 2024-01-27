@@ -1,34 +1,35 @@
 ---
-- name: Deploying the PHP Application to Dev Environment
+- name: Deploying the PHP Applicaion to Dev Enviroment
   become: true
   hosts: todo
 
   tasks:
-    - name: Install remi and RHEL repo
+    - name: install remi and rhel repo
       ansible.builtin.yum:
-        name:
+        name: 
           - https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
           - dnf-utils
           - http://rpms.remirepo.net/enterprise/remi-release-9.rpm
         disable_gpg_check: yes
 
-    - name: Install httpd on the web server
+    
+    - name: install httpd on the webserver
       ansible.builtin.yum:
         name: httpd
         state: present
 
-    - name: Ensure httpd is started and enabled
+    - name: ensure httpd is started and enabled
       ansible.builtin.service:
         name: httpd
-        state: started
+        state: started 
         enabled: yes
-
-    - name: Install PHP
+      
+    - name: install PHP
       ansible.builtin.yum:
         name:
-          - php
+          - php 
           - php-mysqlnd
-          - php-gd
+          - php-gd 
           - php-curl
           - unzip
           - php-common
@@ -38,58 +39,42 @@
           - php-xml
           - php-fpm
           - php-json
-        enablerepo: php:remi-8.3
+        enablerepo: php:remi-7.4
         state: present
-
-    - name: Ensure php-fpm is started and enabled
+    
+    - name: ensure php-fpm is started and enabled
       ansible.builtin.service:
         name: php-fpm
-        state: started
+        state: started 
         enabled: yes
 
     - name: Download the artifact
-      ansible.builtin.get_url:
+      get_url:
         url: http://3.101.140.173:8082/artifactory/generic-local/php-todo-app
         dest: /home/ec2-user/
         url_username: admin
-        url_password: cmVmdGtuOjAxOjE3Mzc5MzE1ODA6WmdVSFVCYUVUcFhZaFRqUEV4OFhkaG5KYUlm
+        url_password: cmVmdGtuOjAxOjE3Mzc5MzUxNjQ6RXA1eUxIYnVnMkFQM2JQbzBKV3VlcGxsVlBF  
 
-    - name: Unzip the artifacts
+
+    - name: unzip the artifacts
       ansible.builtin.unarchive:
-        src: /home/ec2-user/php-todo-app
-        dest: /home/ec2-user/
-        remote_src: yes
+       src: /home/ec2-user/php-todo-app
+       dest: /home/ec2-user/
+       remote_src: yes
 
-    - name: Deploy the code
+    - name: deploy the code
       ansible.builtin.copy:
         src: /home/ec2-user/var/lib/jenkins/workspace/php-todo-app_main/
         dest: /var/www/html/
         force: yes
         remote_src: yes
 
-    - name: Disable default Apache site on Red Hat-based systems
-      become: true
-      block:
-        - name: Stop httpd service
-          ansible.builtin.command: systemctl stop httpd
-          ignore_errors: yes
+    - name: remove nginx default page
+      ansible.builtin.file:
+        path: /etc/httpd/conf.d/welcome.conf
+        state: absent
 
-        - name: Disable httpd service
-          ansible.builtin.command: systemctl disable httpd
-          ignore_errors: yes
-
-        - name: Check if welcome.conf exists
-          ansible.builtin.stat:
-            path: /etc/httpd/conf.d/welcome.conf
-          register: welcome_conf_stat
-          ignore_errors: true
-
-        - name: Move welcome.conf if it exists
-          ansible.builtin.command: mv /etc/httpd/conf.d/welcome.conf /etc/httpd/conf.d/welcome.conf.disabled
-          when: welcome_conf_stat.stat.exists
-          ignore_errors: yes
-
-        - name: Restart httpd service
-          ansible.builtin.command: systemctl restart httpd
-          ignore_errors: yes
-      when: "'Red Hat' in ansible_distribution and ansible_distribution_major_version|int >= 7"
+    - name: restart httpd
+      ansible.builtin.service:
+        name: httpd
+        state: restarted
