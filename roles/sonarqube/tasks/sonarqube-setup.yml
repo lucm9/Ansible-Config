@@ -4,15 +4,9 @@
       - unzip
       - wget
 
-- name: Find the latest SonarQube version
-  ansible.builtin.uri:
-    url: https://api.github.com/repos/SonarSource/sonarqube/releases/latest
-    return_content: yes
-  register: sonarqube_version
-
 - name: download the zip file
   ansible.builtin.get_url:
-    url: "https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-{{ sonarqube_version.json.tag_name }}.zip"
+    url: https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-7.9.3.zip
     dest: /opt/
     mode: 0755
 
@@ -24,33 +18,28 @@
 
 - name: Extract the zip file
   ansible.builtin.unarchive:
-    src: "/opt/sonarqube-{{ sonarqube_version.json.tag_name }}.zip"
+    src: /opt/sonarqube-7.9.3.zip
     dest: /opt/
     remote_src: yes
 
 - name: Copy /opt/sonarqube/
   ansible.builtin.copy:
-    src: "/opt/sonarqube-{{ sonarqube_version.json.tag_name }}/"
+    src: /opt/sonarqube-7.9.3/
     dest: /opt/sonarqube/
     remote_src: yes
     follow: yes
 
 - name: remove the zip file
   ansible.builtin.file:
-    path: "/opt/sonarqube-{{ sonarqube_version.json.tag_name }}.zip"
+    path: /opt/sonarqube-7.9.3.zip
     state: absent
 
-# The rest of your playbook remains unchanged
 - name: add user to run sonar
-  ansible.builtin.shell: useradd -c "user to run SonarQube" -d /opt/sonarqube -g sonar sonar
-  args:
-    creates: /etc/passwd  # or any file that is guaranteed to exist when the user is already present
-  ignore_errors: yes
-
+  ansible.builtin.shell: useradd -c "user to run SonarQube" -d /opt/sonarqube -g sonar sonar 
 
 - name: change ownership
   ansible.builtin.shell: chown sonar:sonar /opt/sonarqube -R
-
+    
 - name: Configuring the SonarQube Server
   ansible.builtin.template:
     src: templates/sonar.properties.j2
@@ -63,9 +52,10 @@
     regexp: '^#RUN_AS_USER='
     state: present
     line: RUN_AS_USER=sonar
+    
 
 - name: create a service file
   ansible.builtin.template:
     src: templates/sonarqube.service.j2
-    dest: /etc/systemd/system/sonar.service
+    dest:  /etc/systemd/system/sonar.service
     force: yes
