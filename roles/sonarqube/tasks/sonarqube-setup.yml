@@ -43,6 +43,10 @@
 # The rest of your playbook remains unchanged
 - name: add user to run sonar
   ansible.builtin.shell: useradd -c "user to run SonarQube" -d /opt/sonarqube -g sonar sonar
+  args:
+    creates: /etc/passwd  # or any file that is guaranteed to exist when the user is already present
+  ignore_errors: yes
+
 
 - name: change ownership
   ansible.builtin.shell: chown sonar:sonar /opt/sonarqube -R
