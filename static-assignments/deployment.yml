@@ -49,10 +49,10 @@
 
     - name: Download the artifact
       ansible.builtin.get_url:
-        url: http://13.57.244.145:8082/artifactory/generic-local/php-todo
+        url: http://3.101.140.173:8082/artifactory/generic-local/php-todo-app
         dest: /home/ec2-user/
         url_username: admin
-        url_password: cmVmdGtuOjAxOjE3Mzc3OTM5NzU6N0tZUlVscFRsZktaeURPdXdwVkJqN2JiVXhK
+        url_password: cmVmdGtuOjAxOjE3Mzc5MzE1ODA6WmdVSFVCYUVUcFhZaFRqUEV4OFhkaG5KYUlm
 
     - name: Unzip the artifacts
       ansible.builtin.unarchive:
