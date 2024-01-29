@@ -1,39 +1,46 @@
 ---
 # tasks file for artifactory
-- name: install java 11 and auxiliary packages
+- name: Install Java 17 and auxiliary packages
   yum:
     name:
-      - java-11-openjdk-devel
+      - java-17-openjdk-devel
       - wget
       - unzip
     state: present
 
-- name: Configuring java path
+- name: Configure Java path
   template:
     src: templates/bash-profile.j2
-    dest: .bash_profile
+    dest: ~/.bash_profile
 
-- name: reload bash profile
+- name: Reload bash profile
   shell: source ~/.bash_profile
 
-- name: add the repository key to repos list
+- name: Add the repository key to repos list
   get_url:
     url: https://releases.jfrog.io/artifactory/artifactory-rpms/artifactory-rpms.repo
     dest: /etc/yum.repos.d/jfrog-artifactory-rpms.repo
     mode: "0755"
 
-- name: update cache
+- name: Update cache
   yum:
     update_cache: yes
 
-- name: install artifactory
+- name: Install Artifactory
   yum:
     name: jfrog-artifactory-oss
     state: present
 
-- name: start and enable artifactory
+- name: Start and enable Artifactory
   become: true
   service:
     name: artifactory
     state: started
     enabled: yes
+
+- name: Open firewall port for Artifactory (change 8081 if necessary)
+  firewalld:
+    port: 8081/tcp
+    permanent: yes
+    state: enabled
+    immediate: yes
