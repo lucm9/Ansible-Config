@@ -38,9 +38,3 @@
     state: started
     enabled: yes
 
-- name: Open firewall port for Artifactory (change 8081 if necessary)
-  firewalld:
-    port: 8081/tcp
-    permanent: yes
-    state: enabled
-    immediate: yes
