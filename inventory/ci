@@ -4,11 +4,6 @@
 [nginx]
 <Nginx-Private-IP-Address>
 
-[sonar]
-172.31.12.251 ansible_ssh_user="ubuntu"
-
 [artifact_repository]
-172.31.3.142 ansible_ssh_user='ec2-user'
+172.31.26.241 ansible_ssh_user='ec2-user'
 
-[db]
-172.31.3.26 ansible_ssh_user="ubuntu"
