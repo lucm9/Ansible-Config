@@ -12,11 +12,11 @@
 #   tags:
 #     - always
 
-# - name: import database file
-#   import_playbook: ../static-assignments/database.yml
+- name: import database file
+  import_playbook: ../static-assignments/database.yml
 
-- name: import artifactory file
-  import_playbook: ../static-assignments/artifactory.yml
+# - name: import artifactory file
+#   import_playbook: ../static-assignments/artifactory.yml
 
 # - name: import webservers file
 #   import_playbook: ../static-assignments/uat-webservers.yml
@@ -25,8 +25,8 @@
 #   import_playbook: ../static-assignments/load-balancer.yml
 #   when: load_balancer_is_required
 
-# - name: nginx assignment
-#   import_playbook: ../static-assignments/nginx.yml
+- name: nginx assignment
+  import_playbook: ../static-assignments/nginx.yml
 
 # - name: Deploy the todo application
 #   import_playbook: ../static-assignments/deployment.yml
