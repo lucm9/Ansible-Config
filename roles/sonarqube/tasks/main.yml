@@ -6,9 +6,9 @@
       - "sonarqube - nproc 4096"
     create: yes
 
-- name: Add Linux Uprising Java PPA repository 
+- name: Add ppa  repository 
   ansible.builtin.apt_repository:
-    repo: "ppa:linuxuprising/java"
+    repo: ppa:linuxuprising/java
 
 - name: Install Python 3 and dependencies
   ansible.builtin.apt:
