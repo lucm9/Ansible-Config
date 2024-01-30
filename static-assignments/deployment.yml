@@ -5,16 +5,16 @@
 
   tasks:
     - name: Update Linux System
-    become: true
-    package:
-      name: '*'
-      state: latest
+      become: true
+      package:
+        name: '*'
+        state: latest
 
     
     - name: Linux Reboot Demo
-    become: true
-    reboot:
-      reboot_timeout: 420
+      become: true
+      reboot:
+        reboot_timeout: 420
     
     - name: install remi and rhel repo
       ansible.builtin.yum:
