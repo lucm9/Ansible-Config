@@ -74,7 +74,7 @@ sudo yum install mysql -y
 
 Learn how to install Jenkins [here](https://www.jenkins.io/doc/book/installing/)
 
-Learn how to installk artifactory [here](https://jfrog.com/open-source/)
+Learn how to install artifactory [here](https://jfrog.com/open-source/)
 
 
 #### JEnkinsfile for Quick Task
@@ -163,7 +163,7 @@ pipeline {
 
     stage('Checkout SCM') {
       steps {
-            git branch: 'main', url: 'https://github.com/Livingstone95/php-todo.git'
+            git branch: 'main', url: 'https://github.com/lucm9/php-todo-app.git'
       }
     }
 
