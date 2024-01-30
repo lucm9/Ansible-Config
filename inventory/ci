@@ -7,3 +7,6 @@
 [artifact_repository]
 172.31.3.167 ansible_ssh_user='ec2-user'
 
+[sonar]
+172.31.2.175 ansible_ssh_user='ec2-user'
+
