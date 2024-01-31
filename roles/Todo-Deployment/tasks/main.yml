@@ -1,7 +1,6 @@
 ---
 - name: Deploying the PHP Application to Dev Environment
   become: true
-  hosts: todo
 
   tasks:
     - name: Update Linux System
@@ -9,6 +8,9 @@
       package:
         name: '*'
         state: latest
+
+    # ... (rest of your tasks)
+
     
     - name: Linux Reboot Demo
       become: true
