@@ -1,21 +1,20 @@
----
-- name: Install unzip and wget
+- name: install unzip and wget
   ansible.builtin.apt:
     name:
       - unzip
       - wget
 
-- name: Download the zip file
+- name: download the zip file
   ansible.builtin.get_url:
     url: https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-7.9.3.zip
     dest: /opt/
     mode: 0755
 
-- name: Create /opt/sonarqube/ directory
+- name: Create /opt/sonarqube/
   ansible.builtin.file:
     path: /opt/sonarqube/
     state: directory
-    mode: '0755'
+    mode: "0755"
 
 - name: Extract the zip file
   ansible.builtin.unarchive:
@@ -23,48 +22,38 @@
     dest: /opt/
     remote_src: yes
 
-- name: Copy necessary files to /opt/sonarqube/
+- name: Copy /opt/sonarqube/
   ansible.builtin.copy:
     src: /opt/sonarqube-7.9.3/
     dest: /opt/sonarqube/
     remote_src: yes
     follow: yes
 
-- name: Remove the zip file
+- name: remove the zip file
   ansible.builtin.file:
     path: /opt/sonarqube-7.9.3.zip
     state: absent
 
-- name: Add user to run sonar
-  ansible.builtin.user:
-    name: sonar
-    comment: "User to run SonarQube"
-    home: /opt/sonarqube
-    group: sonar
-    state: present
-    create_home: yes
+- name: add user to run sonar
+  ansible.builtin.shell: useradd -c "user to run SonarQube" -d /opt/sonarqube -g sonar sonar
 
-- name: Change ownership
-  ansible.builtin.file:
-    path: /opt/sonarqube
-    owner: sonar
-    group: sonar
-    recurse: yes
+- name: change ownership
+  ansible.builtin.shell: chown sonar:sonar /opt/sonarqube -R
 
-- name: Configure SonarQube Server
+- name: Configuring the SonarQube Server
   ansible.builtin.template:
     src: templates/sonar.properties.j2
     dest: /opt/sonarqube/conf/sonar.properties
     force: yes
 
-- name: Update user in sonar.sh file
+- name: Update user in sonar.sh filee
   ansible.builtin.lineinfile:
     path: /opt/sonarqube/bin/linux-x86-64/sonar.sh
-    regexp: '^#RUN_AS_USER='
+    regexp: "^#RUN_AS_USER="
     state: present
     line: RUN_AS_USER=sonar
 
-- name: Create a service file
+- name: create a service file
   ansible.builtin.template:
     src: templates/sonarqube.service.j2
     dest: /etc/systemd/system/sonar.service
