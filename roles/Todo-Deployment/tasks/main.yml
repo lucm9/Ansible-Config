@@ -4,12 +4,6 @@
   hosts: todo
 
   tasks:
-    - name: Update Linux System
-      become: true
-      package:
-        name: '*'
-        state: latest
-
     - name: install remi and rhel repo
       ansible.builtin.yum:
         name: 
