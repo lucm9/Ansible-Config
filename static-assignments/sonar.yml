@@ -3,6 +3,3 @@
   roles:
     - role: sonarqube
       become: yes
-
-
-
