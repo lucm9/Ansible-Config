@@ -43,11 +43,11 @@
     name: psycopg2
     executable: pip3
 
-- name: Install OpenJDK 17
+- name: Install OpenJDK 11
   ansible.builtin.apt:
     name:
-      - openjdk-17-jdk
-      - openjdk-17-jre
+      - openjdk-11-jdk
+      - openjdk-11-jre
     state: present
 
 - import_tasks: postgresql.yml
