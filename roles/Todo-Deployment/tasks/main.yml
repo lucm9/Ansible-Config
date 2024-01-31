@@ -1,7 +1,7 @@
 ---
-- name: Deploying the PHP Application to Dev Environment
-  hosts: todo
+- name: Deploying the PHP Applicaion to Dev Enviroment
   become: true
+  hosts: todo
 
   tasks:
     - name: Update Linux System
@@ -10,53 +10,45 @@
         name: '*'
         state: latest
 
-    # ... (rest of your tasks)
-
-    
-    - name: Linux Reboot Demo
-      become: true
-      reboot:
-        reboot_timeout: 420
-    
-    - name: Install remi and rhel repo
+    - name: install remi and rhel repo
       ansible.builtin.yum:
         name: 
           - "https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm"
           - "dnf-utils"
           - "https://rpms.remirepo.net/enterprise/remi-release-9.rpm"
         disable_gpg_check: yes
-        state: present
+
     
-    - name: Install httpd on the webserver
+    - name: install httpd on the webserver
       ansible.builtin.yum:
         name: httpd
         state: present
 
-    - name: Ensure httpd is started and enabled
+    - name: ensure httpd is started and enabled
       ansible.builtin.service:
         name: httpd
         state: started 
         enabled: yes
       
-    - name: Install PHP
+    - name: install PHP
       ansible.builtin.yum:
         name:
-          - "php"
-          - "php-mysqlnd"
-          - "php-gd"
-          - "php-curl"
-          - "unzip"
-          - "php-common"
-          - "php-mbstring"
-          - "php-opcache"
-          - "php-intl"
-          - "php-xml"
-          - "php-fpm"
-          - "php-json"
-        enablerepo: "php:remi-8.3"
+          - php 
+          - php-mysqlnd
+          - php-gd 
+          - php-curl
+          - unzip
+          - php-common
+          - php-mbstring
+          - php-opcache
+          - php-intl
+          - php-xml
+          - php-fpm
+          - php-json
+        enablerepo: php:remi-8.3
         state: present
     
-    - name: Ensure php-fpm is started and enabled
+    - name: ensure php-fpm is started and enabled
       ansible.builtin.service:
         name: php-fpm
         state: started 
@@ -65,29 +57,30 @@
     - name: Download the artifact
       get_url:
         url: "http://54.193.68.36:8082/artifactory/Luc/php-todo-app"
-        dest: "/home/ec2-user/"
-        url_username: "admin"
-        url_password: "cmVmdGtuOjAxOjE3MzgxODgzMjI6MUhBMGl0WUhrcVNBRTUxMVJBTlUwWUFlZlhG"
-    
-    - name: Unzip the artifacts
-      ansible.builtin.unarchive:
-        src: "/home/ec2-user/php-todo-app"
-        dest: "/home/ec2-user/"
-        remote_src: yes
+        dest: /home/ec2-user/
+        url_username: admin
+        url_password: "cmVmdGtuOjAxOjE3MzgxODgzMjI6MUhBMGl0WUhrcVNBRTUxMVJBTlUwWUFlZlhG"  
 
-    - name: Deploy the code
+
+    - name: unzip the artifacts
+      ansible.builtin.unarchive:
+       src: /home/ec2-user/php-todo
+       dest: /home/ec2-user/
+       remote_src: yes
+
+    - name: deploy the code
       ansible.builtin.copy:
-        src: "/home/ec2-user/var/lib/jenkins/workspace/php-todo-app_main/"
-        dest: "/var/www/html/"
+        src: /home/ec2-user/var/lib/jenkins/workspace/php-todo-app_main/
+        dest: /var/www/html/
         force: yes
         remote_src: yes
 
-    - name: Remove nginx default page
+    - name: remove nginx default page
       ansible.builtin.file:
-        path: "/etc/httpd/conf.d/welcome.conf"
+        path: /etc/httpd/conf.d/welcome.conf
         state: absent
 
-    - name: Restart httpd
+    - name: restart httpd
       ansible.builtin.service:
         name: httpd
         state: restarted
