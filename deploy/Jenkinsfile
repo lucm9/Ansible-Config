@@ -8,6 +8,7 @@ pipeline {
     }
 
     parameters {
+        def ansibleCommand = "/usr/local/bin/ansible-playbook"
         string(name: 'inventory', defaultValue: 'dev', description: 'This is the inventory file for the environment to deploy configuration')
     }
 
