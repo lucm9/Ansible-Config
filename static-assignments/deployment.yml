@@ -1,6 +1,7 @@
 ---
-# - hosts: todo
-#   become: yes
+- hosts: todo
+  become: yes
 
-#   roles:
-#     - role: Todo-Deployment
+  roles:
+    - role: Todo-Deployment
+
