@@ -4,11 +4,8 @@
 
 #   roles:
 #     - role: Todo-Deployment
-
 - name: Deploying the PHP Applicaion to Dev Enviroment
   become: true
-  hosts: todo
-
   tasks:
     - name: install remi and rhel repo
       ansible.builtin.yum:
