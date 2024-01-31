@@ -60,9 +60,10 @@ and open bind address 0.0.0.0 at ` /etc/mysql/mysql.conf.d/mysqld.cnf`
 #### Install phpunit, phploc
 =====================================
 - sudo dnf --enablerepo=remi install php-phpunit-phploc
-- wget -O phpunit https://phar.phpunit.de/phpunit-7.phar
+- wget -O phpunit https://phar.phpunit.de/phpunit-10.phar
 - chmod +x phpunit
 - sudo yum  install php-xdebug
+- sudo mv phploc.par /usr/local/bin/phploc
 
 #### for database connection
 ====================================

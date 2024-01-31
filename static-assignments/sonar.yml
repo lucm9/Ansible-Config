@@ -1,5 +1,6 @@
 ---
 - hosts: sonar
+  become: yes
+
   roles:
     - role: sonarqube
-      become: yes
