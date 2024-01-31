@@ -1,0 +1,66 @@
+---
+- name: Add max limits
+  ansible.builtin.lineinfile:
+    path: /etc/security/limits.conf
+    line: 
+      - "sonarqube - nofile 65536"
+      - "sonarqube - nproc 4096"
+    create: yes
+
+- name: Install python3-apt
+  ansible.builtin.apt:
+    name:
+      - python3-apt
+    state: present
+
+- name: Add ppa  repository 
+  ansible.builtin.apt_repository:
+    repo: ppa:linuxuprising/java
+
+- name: Install Python 3 and dependencies
+  ansible.builtin.apt:
+    name:
+      - python3
+      - python3-pip
+      - python3-dev
+      - libpq-dev
+    state: present
+
+# Rest of your playbook...
+
+- name: Install Python setuptools
+  pip:
+    name: setuptools
+    extra_args: --upgrade
+
+- name: Upgrade pip
+  pip:
+    name: pip
+    extra_args: --upgrade
+
+- name: Install pip dependencies
+  pip:
+    name: psycopg2
+    executable: pip3
+
+- name: Install OpenJDK 11
+  ansible.builtin.apt:
+    name:
+      - openjdk-11-jdk
+      - openjdk-11-jre
+    state: present
+
+- import_tasks: postgresql.yml
+
+- name: Ensure group sonar exists
+  ansible.builtin.group:
+    name: sonar
+    state: present
+
+- import_tasks: sonarqube-setup.yml
+
+- name: Start and enable sonarqube
+  ansible.builtin.systemd:
+    name: sonar
+    state: started
+    enabled: yes

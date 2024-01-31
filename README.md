@@ -60,9 +60,10 @@ and open bind address 0.0.0.0 at ` /etc/mysql/mysql.conf.d/mysqld.cnf`
 #### Install phpunit, phploc
 =====================================
 - sudo dnf --enablerepo=remi install php-phpunit-phploc
-- wget -O phpunit https://phar.phpunit.de/phpunit-7.phar
+- wget -O phpunit https://phar.phpunit.de/phpunit-10.phar
 - chmod +x phpunit
 - sudo yum  install php-xdebug
+- sudo mv phploc.par /usr/local/bin/phploc
 
 #### for database connection
 ====================================
@@ -74,7 +75,7 @@ sudo yum install mysql -y
 
 Learn how to install Jenkins [here](https://www.jenkins.io/doc/book/installing/)
 
-Learn how to installk artifactory [here](https://jfrog.com/open-source/)
+Learn how to install artifactory [here](https://jfrog.com/open-source/)
 
 
 #### JEnkinsfile for Quick Task
@@ -163,7 +164,7 @@ pipeline {
 
     stage('Checkout SCM') {
       steps {
-            git branch: 'main', url: 'https://github.com/Livingstone95/php-todo.git'
+            git branch: 'main', url: 'https://github.com/lucm9/php-todo-app.git'
       }
     }
 
